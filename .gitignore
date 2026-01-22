@@ -48,3 +48,7 @@ web-build/
 .env
 .env.local
 .env.*.local
+
+# Cursor AI Configuration
+# Note: .cursor/ is intentionally NOT ignored so the whole team shares the same AI rules
+# .cursor/ directory should be committed to the repository
