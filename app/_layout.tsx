@@ -6,6 +6,13 @@ export default function RootLayout() {
       screenOptions={{
         headerTitleAlign: "center",
       }}
-    />
+    >
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack>
   );
 }

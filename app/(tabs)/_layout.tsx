@@ -5,12 +5,16 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerTitleAlign: "center",
+        tabBarStyle: {
+          display: "none",
+        },
       }}
     >
       <Tabs.Screen
         name="home"
         options={{
           title: "Home",
+          headerTitle: "Home",
         }}
       />
     </Tabs>

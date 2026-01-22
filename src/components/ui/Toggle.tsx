@@ -1,4 +1,10 @@
-import { Switch, StyleSheet, View, Text, ViewStyle } from "react-native";
+import { Switch, StyleSheet, Text, ViewStyle, Pressable } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+import { useEffect } from "react";
 import { colors } from "@/src/theme/colors";
 import { spacing } from "@/src/theme/spacing";
 
@@ -11,10 +17,39 @@ type Props = {
 };
 
 export function Toggle({ value, onValueChange, label, disabled = false, style }: Props) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  // Animate when value changes
+  useEffect(() => {
+    if (!disabled) {
+      scale.value = withSpring(0.97, { damping: 15, stiffness: 300 });
+      const timer = setTimeout(() => {
+        scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [value, disabled]);
+
+  const handleLabelPress = () => {
+    if (!disabled) {
+      onValueChange(!value);
+    }
+  };
+
   return (
-    <View style={[styles.container, style]}>
-      {label && (
-        <Text style={[styles.label, disabled && styles.labelDisabled]}>{label}</Text>
+    <Animated.View style={[styles.container, style, animatedStyle]}>
+      {label ? (
+        <Pressable onPress={handleLabelPress} disabled={disabled}>
+          <Text style={[styles.label, disabled && styles.labelDisabled]}>{label}</Text>
+        </Pressable>
+      ) : (
+        <Text style={[styles.label, disabled && styles.labelDisabled]} />
       )}
       <Switch
         value={value}
@@ -23,7 +58,7 @@ export function Toggle({ value, onValueChange, label, disabled = false, style }:
         trackColor={{ false: colors.muted, true: colors.text }}
         thumbColor={colors.background}
       />
-    </View>
+    </Animated.View>
   );
 }
 
@@ -31,13 +66,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    alignSelf: "flex-start",
     paddingVertical: spacing.sm,
   },
   label: {
     fontSize: 16,
     color: colors.text,
-    flex: 1,
     marginRight: spacing.md,
   },
   labelDisabled: {
