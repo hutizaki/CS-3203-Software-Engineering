@@ -299,6 +299,22 @@ Access a comprehensive set of Git operations:
 3. Commit your changes with a clear message
 4. Push your branch to remote
 5. Create a pull request for review
+6. **Wait for code review approval** before merging
+
+### Pull Requests and Code Reviews
+
+**Important: Code Review Required**
+
+This repository has branch protection enabled on the `main` branch. **All changes must be reviewed and approved before they can be merged into main.**
+
+**Process:**
+
+1. After pushing your branch, create a Pull Request (PR) on GitHub
+2. Request review from at least one team member
+3. Address any feedback or requested changes
+4. Once approved, your PR can be merged into `main`
+
+**You cannot directly push to `main`** - all changes must go through the pull request and code review process. This ensures code quality and gives team members visibility into changes.
 
 ---
 
