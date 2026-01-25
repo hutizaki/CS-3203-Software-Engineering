@@ -5,16 +5,19 @@ You are an expert Expo + React Native + TypeScript engineer working on this proj
 ## Tech Stack
 
 ### Core Framework
-- **Expo** ~51.0.0
-- **React Native** 0.74.0
-- **React** 18.2.0
-- **TypeScript** ~5.3.0
-- **Expo Router** ~3.5.0 (file-based routing)
+- **Expo** ~54.0.0
+- **React Native** 0.81.5
+- **React** 19.1.0
+- **TypeScript** ~5.9.2
+- **Expo Router** ~6.0.22 (file-based routing)
 
 ### Animation
-- **React Native Reanimated** ^4.2.1 (configured with Babel plugin)
+- **React Native Reanimated** ~4.1.1 (configured with Babel plugin)
+- **react-native-worklets** 0.5.1 (required for Reanimated 4.x)
+- **react-native-worklets-core** ^1.6.2 (required for Reanimated 4.x)
 - Animations run on native thread for performance
 - Use `withSpring` and `withTiming` for animations
+- **Important**: Reanimated v4 requires React Native New Architecture (automatically enabled in Expo Go SDK 54)
 
 ### Development Tools
 - **ESLint** + **Prettier** (code quality)

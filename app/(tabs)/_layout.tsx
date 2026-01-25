@@ -4,7 +4,6 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerTitleAlign: "center",
         tabBarStyle: {
           display: "none",
         },
