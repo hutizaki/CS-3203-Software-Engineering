@@ -7,6 +7,7 @@ A React Native mobile application built with Expo, TypeScript, and Expo Router. 
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Development Builds](#development-builds)
 - [Project Structure](#project-structure)
 - [Development Workflow](#development-workflow)
 - [Git Workflow](#git-workflow)
@@ -97,6 +98,66 @@ A QR code will appear in your terminal, along with several options for viewing y
 - Press `i` for iOS simulator (macOS only)
 - Press `a` for Android emulator
 - Requires Xcode (iOS) or Android Studio (Android) to be installed
+
+---
+
+## Development Builds
+
+Development builds are standalone app binaries you can install on physical devices (or simulators) without Expo Go. They support native modules and let teammates test on real devices. Builds are created in the cloud with **EAS (Expo Application Services)**.
+
+### Prerequisites
+
+- **Expo account** – [Sign up](https://expo.dev/signup) (free).
+- **EAS CLI** – Run builds with `npx eas-cli` (no global install required).
+- **iOS only:** An **Apple Developer Program** membership is required. To let teammates install on their devices, either:
+  - Add their **device UDIDs** to your Apple Developer account (App IDs → Devices), or
+  - Add them as **team members** to your Apple Developer team (recommended; they use their Apple ID and do not need their own paid membership).
+
+### One-time project setup
+
+1. Log in to EAS and link the project (run in the repo root):
+
+   ```bash
+   npx eas-cli login
+   npx eas-cli build:configure
+   ```
+
+   Use the defaults when prompted. This ensures the project is linked to your Expo account.
+
+2. **iOS:** In [Expo Dashboard](https://expo.dev) → your project → **Credentials**, configure your Apple Developer account (or let EAS create a managed Apple Developer account for you).
+
+### Building a development build
+
+From the project root (after `npm i`):
+
+```bash
+# iOS (device; requires Apple Developer setup)
+npm run build:dev:ios
+
+# Android (APK for internal install)
+npm run build:dev:android
+```
+
+Or use EAS CLI directly: `npx eas-cli build --profile development --platform ios` (same for `android`).
+
+Builds run in the cloud. When a build finishes, EAS shows a **build page** with a link to install.
+
+### Installing the build (teammates)
+
+- **iOS:** Open the build page link on the device (or scan the QR code). The device must be registered (UDID) in the Apple Developer account used for the build, or the teammate must be in your Apple Developer team.
+- **Android:** Download the APK from the build page link and install it on the device (allow “Install from unknown sources” if prompted).
+
+### Using the development build
+
+1. Install the built app on your device (or simulator) using the link from the EAS build page.
+2. From the project root, start the dev server: `npm start`.
+3. Open the development build app and scan the QR code (or enter the URL) to connect to the dev server. You get the same hot reload experience as with Expo Go.
+
+Build profiles in `eas.json`:
+
+- **development** – For day-to-day dev (includes dev client, internal distribution).
+- **preview** – Internal testing without dev client (e.g. APK for Android).
+- **production** – For store submissions (not used for dev builds).
 
 ---
 
