@@ -23,7 +23,7 @@ export function ComponentDemo() {
       <Input label="First Name" value="Your mom" onChangeText={(text) => console.log("Input changed", text)} />
 
       <Text variant="body">Input Field with Error</Text>
-      <Input label="Last Name" value="You are a chud" onChangeText={(text) => console.log("Input changed", text)} error="This is an input error" />
+      <Input label="Last Name" value="Bryan is a chud" onChangeText={(text) => console.log("Input changed", text)} error="This is an input error" />
     </>
   );
 }
