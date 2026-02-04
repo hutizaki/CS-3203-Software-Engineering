@@ -22,7 +22,7 @@ type Props = {
 const variantStyles: Record<Variant, { container: ViewStyle; text: TextStyle }> = {
   primary: {
     container: {
-      backgroundColor: colors.text,
+      backgroundColor: colors.green,
       borderWidth: 0,
     },
     text: {
