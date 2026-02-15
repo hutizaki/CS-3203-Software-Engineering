@@ -19,7 +19,10 @@ type Props = {
   style?: ViewStyle;
 };
 
-const variantStyles: Record<Variant, { container: ViewStyle; text: TextStyle }> = {
+const variantStyles: Record<
+  Variant,
+  { container: ViewStyle; text: TextStyle }
+> = {
   primary: {
     container: {
       backgroundColor: colors.blue,
@@ -50,7 +53,13 @@ const variantStyles: Record<Variant, { container: ViewStyle; text: TextStyle }> 
   },
 };
 
-export function Button({ title, onPress, variant = "primary", disabled = false, style }: Props) {
+export function Button({
+  title,
+  onPress,
+  variant = "primary",
+  disabled = false,
+  style,
+}: Props) {
   const variantStyle = variantStyles[variant];
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
@@ -93,7 +102,13 @@ export function Button({ title, onPress, variant = "primary", disabled = false, 
           animatedStyle,
         ]}
       >
-        <Text style={[styles.text, variantStyle.text, disabled && styles.disabledText]}>
+        <Text
+          style={[
+            styles.text,
+            variantStyle.text,
+            disabled && styles.disabledText,
+          ]}
+        >
           {title}
         </Text>
       </Animated.View>

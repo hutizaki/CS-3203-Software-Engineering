@@ -44,7 +44,10 @@ export function SignUpScreen() {
       await setCurrentUser(trimmedEmail);
       router.replace("/dashboard");
     } catch (e) {
-      Alert.alert("Sign up failed", e instanceof Error ? e.message : "Something went wrong.");
+      Alert.alert(
+        "Sign up failed",
+        e instanceof Error ? e.message : "Something went wrong.",
+      );
     } finally {
       setLoading(false);
     }

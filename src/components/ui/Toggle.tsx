@@ -16,7 +16,13 @@ type Props = {
   style?: ViewStyle;
 };
 
-export function Toggle({ value, onValueChange, label, disabled = false, style }: Props) {
+export function Toggle({
+  value,
+  onValueChange,
+  label,
+  disabled = false,
+  style,
+}: Props) {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -46,7 +52,9 @@ export function Toggle({ value, onValueChange, label, disabled = false, style }:
     <Animated.View style={[styles.container, style, animatedStyle]}>
       {label ? (
         <Pressable onPress={handleLabelPress} disabled={disabled}>
-          <Text style={[styles.label, disabled && styles.labelDisabled]}>{label}</Text>
+          <Text style={[styles.label, disabled && styles.labelDisabled]}>
+            {label}
+          </Text>
         </Pressable>
       ) : (
         <Text style={[styles.label, disabled && styles.labelDisabled]} />

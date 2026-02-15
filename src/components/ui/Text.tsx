@@ -16,7 +16,11 @@ const variantStyle: Record<Variant, TextStyle> = {
 };
 
 export function Text({ variant = "body", style, children }: Props) {
-  return <RNText style={[styles.base, variantStyle[variant], style]}>{children}</RNText>;
+  return (
+    <RNText style={[styles.base, variantStyle[variant], style]}>
+      {children}
+    </RNText>
+  );
 }
 
 const styles = StyleSheet.create({

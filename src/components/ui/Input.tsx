@@ -1,4 +1,12 @@
-import { TextInput, StyleSheet, View, Text, TextStyle, ViewStyle, TextInputProps } from "react-native";
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  TextStyle,
+  ViewStyle,
+  TextInputProps,
+} from "react-native";
 import { colors } from "@/src/theme/colors";
 import { spacing } from "@/src/theme/spacing";
 

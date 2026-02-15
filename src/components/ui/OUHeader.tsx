@@ -34,7 +34,10 @@ export function OUHeader({ showBackButton = false, fullWidth = false }: Props) {
       {showBackButton && (
         <Pressable
           onPress={() => router.back()}
-          style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}
+          style={({ pressed }) => [
+            styles.backButton,
+            pressed && styles.backButtonPressed,
+          ]}
           hitSlop={12}
         >
           <Text style={styles.backText}>← Back</Text>

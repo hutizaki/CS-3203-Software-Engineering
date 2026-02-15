@@ -1,0 +1,3 @@
+# Force LF line endings on all text files so Mac and Windows stay in sync.
+# Prevents "delete cr" / Prettier from touching 25+ files on PC.
+* text=auto eol=lf

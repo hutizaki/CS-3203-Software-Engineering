@@ -25,7 +25,10 @@ export function LogInScreen() {
     const trimmedPassword = password.trim();
 
     if (!trimmedEmail || !trimmedPassword) {
-      Alert.alert("Missing information", "Please enter your email and password.");
+      Alert.alert(
+        "Missing information",
+        "Please enter your email and password.",
+      );
       return;
     }
 

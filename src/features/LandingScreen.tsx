@@ -16,7 +16,8 @@ export function LandingScreen() {
           Your advising, on your terms.
         </Text>
         <Text variant="body" style={styles.subtext}>
-          Plan courses, track progress, and stay on top of your degree—all in one place. Self-service advising built for students.
+          Plan courses, track progress, and stay on top of your degree—all in
+          one place. Self-service advising built for students.
         </Text>
       </View>
 

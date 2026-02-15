@@ -23,7 +23,9 @@ export async function getStoredUsers(): Promise<StoredUser[]> {
 
 export async function saveUser(user: StoredUser): Promise<void> {
   const users = await getStoredUsers();
-  const exists = users.some((u) => u.email.toLowerCase() === user.email.toLowerCase());
+  const exists = users.some(
+    (u) => u.email.toLowerCase() === user.email.toLowerCase(),
+  );
   if (exists) {
     throw new Error("An account with this email already exists.");
   }
@@ -43,10 +45,14 @@ export async function clearCurrentUser(): Promise<void> {
   await AsyncStorage.removeItem(CURRENT_USER_KEY);
 }
 
-export async function validateLogin(email: string, password: string): Promise<boolean> {
+export async function validateLogin(
+  email: string,
+  password: string,
+): Promise<boolean> {
   const users = await getStoredUsers();
   const user = users.find(
-    (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+    (u) =>
+      u.email.toLowerCase() === email.toLowerCase() && u.password === password,
   );
   return !!user;
 }
