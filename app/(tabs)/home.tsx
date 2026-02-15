@@ -1,10 +1,12 @@
 import { Screen } from "@/src/components/ui/Screen";
-import { ComponentDemo } from "@/src/features/ComponentDemo";
+import { OUHeader } from "@/src/components/ui/OUHeader";
+import { LandingScreen } from "@/src/features/LandingScreen";
 
 export default function HomeScreen() {
   return (
     <Screen>
-      <ComponentDemo />
+      <OUHeader fullWidth />
+      <LandingScreen />
     </Screen>
   );
 }

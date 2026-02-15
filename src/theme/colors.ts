@@ -3,4 +3,5 @@ export const colors = {
   background: "#FFFFFF",
   muted: "#666666", //tesing comment, THIS IS VERY IMPORTANT TEXT
   blue: "#4169E1",
+  ouMaroon: "#841617",
 };
