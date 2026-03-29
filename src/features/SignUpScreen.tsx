@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -21,6 +21,12 @@ export function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const latestValuesRef = useRef({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -147,6 +153,7 @@ export function SignUpScreen() {
             label="First name"
             value={firstName}
             onChangeText={(value) => {
+              latestValuesRef.current.firstName = value;
               setFirstName(value);
               if (touched.firstName) {
                 updateFieldError("firstName", value);
@@ -154,7 +161,7 @@ export function SignUpScreen() {
             }}
             onBlur={() => {
               markTouched("firstName");
-              updateFieldError("firstName", firstName);
+              updateFieldError("firstName", latestValuesRef.current.firstName);
             }}
             placeholder="First name"
             autoCapitalize="words"
@@ -165,6 +172,7 @@ export function SignUpScreen() {
             label="Last name"
             value={lastName}
             onChangeText={(value) => {
+              latestValuesRef.current.lastName = value;
               setLastName(value);
               if (touched.lastName) {
                 updateFieldError("lastName", value);
@@ -172,7 +180,7 @@ export function SignUpScreen() {
             }}
             onBlur={() => {
               markTouched("lastName");
-              updateFieldError("lastName", lastName);
+              updateFieldError("lastName", latestValuesRef.current.lastName);
             }}
             placeholder="Last name"
             autoCapitalize="words"
@@ -183,6 +191,7 @@ export function SignUpScreen() {
             label="Email"
             value={email}
             onChangeText={(value) => {
+              latestValuesRef.current.email = value;
               setEmail(value);
               if (touched.email) {
                 updateFieldError("email", value);
@@ -190,7 +199,7 @@ export function SignUpScreen() {
             }}
             onBlur={() => {
               markTouched("email");
-              updateFieldError("email", email);
+              updateFieldError("email", latestValuesRef.current.email);
             }}
             placeholder="you@example.com"
             keyboardType="email-address"
@@ -202,6 +211,7 @@ export function SignUpScreen() {
             label="Password"
             value={password}
             onChangeText={(value) => {
+              latestValuesRef.current.password = value;
               setPassword(value);
               if (touched.password) {
                 updateFieldError("password", value);
@@ -209,7 +219,7 @@ export function SignUpScreen() {
             }}
             onBlur={() => {
               markTouched("password");
-              updateFieldError("password", password);
+              updateFieldError("password", latestValuesRef.current.password);
             }}
             placeholder="Choose a password"
             secureTextEntry
