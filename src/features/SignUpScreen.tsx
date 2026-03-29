@@ -13,6 +13,8 @@ import { Input } from "@/src/components/ui/Input";
 import { Button } from "@/src/components/ui/Button";
 import { spacing } from "@/src/theme/spacing";
 import { saveUser, setCurrentUser } from "@/src/lib/auth";
+import { mapSignUpErrorToUserMessage } from "@/src/lib/signUpErrorMessages";
+import { FormErrorBanner } from "@/src/components/ui/FormErrorBanner";
 
 export function SignUpScreen() {
   const router = useRouter();
@@ -21,6 +23,11 @@ export function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const clearSubmitError = () => {
+    setSubmitError(null);
+  };
 
   const handleSubmit = async () => {
     const trimmedFirst = firstName.trim();
@@ -33,6 +40,7 @@ export function SignUpScreen() {
       return;
     }
 
+    setSubmitError(null);
     setLoading(true);
     try {
       await saveUser({
@@ -44,10 +52,7 @@ export function SignUpScreen() {
       await setCurrentUser(trimmedEmail);
       router.replace("/dashboard");
     } catch (e) {
-      Alert.alert(
-        "Sign up failed",
-        e instanceof Error ? e.message : "Something went wrong.",
-      );
+      setSubmitError(mapSignUpErrorToUserMessage(e));
     } finally {
       setLoading(false);
     }
@@ -75,7 +80,10 @@ export function SignUpScreen() {
           <Input
             label="First name"
             value={firstName}
-            onChangeText={setFirstName}
+            onChangeText={(value) => {
+              clearSubmitError();
+              setFirstName(value);
+            }}
             placeholder="First name"
             autoCapitalize="words"
             autoCorrect={false}
@@ -83,7 +91,10 @@ export function SignUpScreen() {
           <Input
             label="Last name"
             value={lastName}
-            onChangeText={setLastName}
+            onChangeText={(value) => {
+              clearSubmitError();
+              setLastName(value);
+            }}
             placeholder="Last name"
             autoCapitalize="words"
             autoCorrect={false}
@@ -91,7 +102,10 @@ export function SignUpScreen() {
           <Input
             label="Email"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(value) => {
+              clearSubmitError();
+              setEmail(value);
+            }}
             placeholder="you@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
@@ -100,7 +114,10 @@ export function SignUpScreen() {
           <Input
             label="Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              clearSubmitError();
+              setPassword(value);
+            }}
             placeholder="Choose a password"
             secureTextEntry
             autoCapitalize="none"
@@ -111,6 +128,7 @@ export function SignUpScreen() {
             variant="primary"
             disabled={loading}
           />
+          <FormErrorBanner message={submitError} />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

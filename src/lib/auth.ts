@@ -10,6 +10,30 @@ export type StoredUser = {
   password: string;
 };
 
+export type SignUpErrorCode =
+  | "DUPLICATE_EMAIL"
+  | "WEAK_PASSWORD"
+  | "NETWORK_ERROR";
+
+export class SignUpError extends Error {
+  readonly code: SignUpErrorCode;
+
+  constructor(code: SignUpErrorCode) {
+    super(code);
+    this.name = "SignUpError";
+    this.code = code;
+  }
+}
+
+function isWeakPassword(password: string): boolean {
+  if (password.length < 8) return true;
+  const lower = password.toLowerCase();
+  const common = ["password", "12345678", "qwerty12", "11111111"];
+  if (common.includes(lower)) return true;
+  if (/^(.)\1{7,}$/.test(password)) return true;
+  return false;
+}
+
 export async function getStoredUsers(): Promise<StoredUser[]> {
   try {
     const raw = await AsyncStorage.getItem(USERS_KEY);
@@ -22,15 +46,25 @@ export async function getStoredUsers(): Promise<StoredUser[]> {
 }
 
 export async function saveUser(user: StoredUser): Promise<void> {
-  const users = await getStoredUsers();
-  const exists = users.some(
-    (u) => u.email.toLowerCase() === user.email.toLowerCase(),
-  );
-  if (exists) {
-    throw new Error("An account with this email already exists.");
+  try {
+    const users = await getStoredUsers();
+    const exists = users.some(
+      (u) => u.email.toLowerCase() === user.email.toLowerCase(),
+    );
+    if (exists) {
+      throw new SignUpError("DUPLICATE_EMAIL");
+    }
+    if (isWeakPassword(user.password)) {
+      throw new SignUpError("WEAK_PASSWORD");
+    }
+    users.push(user);
+    await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
+  } catch (e) {
+    if (e instanceof SignUpError) {
+      throw e;
+    }
+    throw new SignUpError("NETWORK_ERROR");
   }
-  users.push(user);
-  await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
 }
 
 export async function getCurrentUser(): Promise<string | null> {
