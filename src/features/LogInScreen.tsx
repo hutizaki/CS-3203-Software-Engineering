@@ -12,13 +12,20 @@ import { Text } from "@/src/components/ui/Text";
 import { Input } from "@/src/components/ui/Input";
 import { Button } from "@/src/components/ui/Button";
 import { spacing } from "@/src/theme/spacing";
-import { validateLogin, setCurrentUser } from "@/src/lib/auth";
+import { loginWithCredentials, setCurrentUser } from "@/src/lib/auth";
+import { mapLoginErrorToUserMessage } from "@/src/lib/loginErrorMessages";
+import { FormErrorBanner } from "@/src/components/ui/FormErrorBanner";
 
 export function LogInScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const clearSubmitError = () => {
+    setSubmitError(null);
+  };
 
   const handleSubmit = async () => {
     const trimmedEmail = email.trim();
@@ -32,17 +39,14 @@ export function LogInScreen() {
       return;
     }
 
+    setSubmitError(null);
     setLoading(true);
     try {
-      const valid = await validateLogin(trimmedEmail, trimmedPassword);
-      if (valid) {
-        await setCurrentUser(trimmedEmail);
-        router.replace("/dashboard");
-      } else {
-        Alert.alert("Log in failed", "Invalid email or password.");
-      }
-    } catch {
-      Alert.alert("Log in failed", "Something went wrong. Please try again.");
+      await loginWithCredentials(trimmedEmail, trimmedPassword);
+      await setCurrentUser(trimmedEmail);
+      router.replace("/dashboard");
+    } catch (e) {
+      setSubmitError(mapLoginErrorToUserMessage(e));
     } finally {
       setLoading(false);
     }
@@ -70,7 +74,10 @@ export function LogInScreen() {
           <Input
             label="Email"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(value) => {
+              clearSubmitError();
+              setEmail(value);
+            }}
             placeholder="you@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
@@ -79,7 +86,10 @@ export function LogInScreen() {
           <Input
             label="Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              clearSubmitError();
+              setPassword(value);
+            }}
             placeholder="Your password"
             secureTextEntry
             autoCapitalize="none"
@@ -90,6 +100,7 @@ export function LogInScreen() {
             variant="primary"
             disabled={loading}
           />
+          <FormErrorBanner message={submitError} />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
