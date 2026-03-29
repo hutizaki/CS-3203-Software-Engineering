@@ -21,17 +21,88 @@ export function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  const [touched, setTouched] = useState({
+    firstName: false,
+    lastName: false,
+    email: false,
+    password: false,
+  });
+
+  const validateField = (
+    field: "firstName" | "lastName" | "email" | "password",
+    value: string,
+  ) => {
+    const trimmedValue = value.trim();
+    if (!trimmedValue) {
+      return "This field is required";
+    }
+
+    if (field === "email" && !trimmedValue.includes("@")) {
+      return "Please enter a valid email";
+    }
+
+    if (field === "password" && trimmedValue.length < 8) {
+      return "Password must be at least 8 characters";
+    }
+
+    return "";
+  };
+
+  const updateFieldError = (
+    field: "firstName" | "lastName" | "email" | "password",
+    value: string,
+  ) => {
+    setErrors((prev) => ({
+      ...prev,
+      [field]: validateField(field, value),
+    }));
+  };
+
+  const markTouched = (
+    field: "firstName" | "lastName" | "email" | "password",
+  ) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const validateAllFields = () => {
+    const nextErrors = {
+      firstName: validateField("firstName", firstName),
+      lastName: validateField("lastName", lastName),
+      email: validateField("email", email),
+      password: validateField("password", password),
+    };
+    setErrors(nextErrors);
+    return Object.values(nextErrors).every((error) => !error);
+  };
+
+  const isFormValid =
+    !validateField("firstName", firstName) &&
+    !validateField("lastName", lastName) &&
+    !validateField("email", email) &&
+    !validateField("password", password);
 
   const handleSubmit = async () => {
+    setTouched({
+      firstName: true,
+      lastName: true,
+      email: true,
+      password: true,
+    });
+
+    if (!validateAllFields()) {
+      return;
+    }
+
     const trimmedFirst = firstName.trim();
     const trimmedLast = lastName.trim();
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
-
-    if (!trimmedFirst || !trimmedLast || !trimmedEmail || !trimmedPassword) {
-      Alert.alert("Missing information", "Please fill in all fields.");
-      return;
-    }
 
     setLoading(true);
     try {
@@ -75,41 +146,81 @@ export function SignUpScreen() {
           <Input
             label="First name"
             value={firstName}
-            onChangeText={setFirstName}
+            onChangeText={(value) => {
+              setFirstName(value);
+              if (touched.firstName) {
+                updateFieldError("firstName", value);
+              }
+            }}
+            onBlur={() => {
+              markTouched("firstName");
+              updateFieldError("firstName", firstName);
+            }}
             placeholder="First name"
             autoCapitalize="words"
             autoCorrect={false}
+            error={touched.firstName ? errors.firstName : undefined}
           />
           <Input
             label="Last name"
             value={lastName}
-            onChangeText={setLastName}
+            onChangeText={(value) => {
+              setLastName(value);
+              if (touched.lastName) {
+                updateFieldError("lastName", value);
+              }
+            }}
+            onBlur={() => {
+              markTouched("lastName");
+              updateFieldError("lastName", lastName);
+            }}
             placeholder="Last name"
             autoCapitalize="words"
             autoCorrect={false}
+            error={touched.lastName ? errors.lastName : undefined}
           />
           <Input
             label="Email"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(value) => {
+              setEmail(value);
+              if (touched.email) {
+                updateFieldError("email", value);
+              }
+            }}
+            onBlur={() => {
+              markTouched("email");
+              updateFieldError("email", email);
+            }}
             placeholder="you@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            error={touched.email ? errors.email : undefined}
           />
           <Input
             label="Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              setPassword(value);
+              if (touched.password) {
+                updateFieldError("password", value);
+              }
+            }}
+            onBlur={() => {
+              markTouched("password");
+              updateFieldError("password", password);
+            }}
             placeholder="Choose a password"
             secureTextEntry
             autoCapitalize="none"
+            error={touched.password ? errors.password : undefined}
           />
           <Button
             title={loading ? "Creating account…" : "Sign up"}
             onPress={handleSubmit}
             variant="primary"
-            disabled={loading}
+            disabled={loading || !isFormValid}
           />
         </View>
       </ScrollView>
